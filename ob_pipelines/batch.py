@@ -174,12 +174,12 @@ class BatchTask(luigi.Task):
         bc.wait_on_job(job_id)
 
 
-class TaskWrapper(luigi.Task):
+class LoggingTaskWrapper(luigi.Task):
 
     @property
-    def task_id(self):
-        return getattr(self, "__task_id", None)
+    def task_key(self):
+        return getattr(self, "__task_key", None)
 
-    @task_id.setter
-    def task_id(self, value):
-        setattr(self, "__task_id", value)
+    @task_key.setter
+    def task_key(self, value):
+        setattr(self, "__task_key", value)

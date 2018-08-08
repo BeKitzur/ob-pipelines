@@ -1,6 +1,7 @@
-from luigi import Task, Parameter, BoolParameter
+from luigi import Parameter, BoolParameter
 from luigi.contrib.s3 import S3Target
 
+from ob_pipelines import LoggingTaskWrapper
 from ob_pipelines.apps.kallisto import merge_column
 from ob_pipelines.config import cfg
 from ob_pipelines.entities.persistence import get_samples_by_experiment_id
@@ -8,7 +9,7 @@ from ob_pipelines.pipelines.rnaseq.tasks.kallisto import Kallisto
 from ob_pipelines.s3 import csv_to_s3
 
 
-class MergeKallisto(Task):
+class MergeKallisto(LoggingTaskWrapper):
     expt_id = Parameter()
     annot = BoolParameter(False)
 

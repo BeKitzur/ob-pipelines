@@ -81,12 +81,12 @@ def get_tasks():
 
 
 def create_task(task: Task):
-    entity = {'Name': task.name, 'Exception': task.exception, 'Status': task.status}
-    #
+    entity = {'Name': task.name, 'Exception': task.exception, 'Status': task.status,
+              'Started_at': task.started_at}
     return Task(**_client.create_record(entity, TASK_TABLE))
 
 
 def update_task(task: Task):
-    entity = {'Name': task.name, 'Completed at': task.completed_at, 'Exception': task.exception, 'Status': task.status,
-              'Completed_at': task.completed_at, 'Started_at': task.started_at}
+    entity = {'fields': {'Name': task.name, 'Status': task.status, 'Exception': task.exception,
+                         'Completed_at': task.completed_at, 'Started_at': task.started_at}}
     return _client.update_record(task.key, TASK_TABLE, entity)

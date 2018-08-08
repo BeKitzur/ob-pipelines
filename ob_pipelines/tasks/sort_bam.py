@@ -1,11 +1,11 @@
 from luigi.contrib.s3 import S3Target
 
-from ob_pipelines.batch import BatchTask
+from ob_pipelines.batch import BatchTask, LoggingTaskWrapper
 from ob_pipelines.entities.sample import Sample
 from ob_pipelines.pipelines.rnaseq.tasks.star import Star
 
 
-class SortBam(BatchTask, Sample):
+class SortBam(BatchTask, LoggingTaskWrapper, Sample):
     job_definition = 'samtools-sort-by-coord'
 
     @property

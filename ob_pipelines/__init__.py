@@ -6,7 +6,7 @@ from datetime import datetime
 import luigi
 
 import ob_pipelines
-from ob_pipelines.batch import TaskWrapper
+from ob_pipelines.batch import LoggingTaskWrapper
 from ob_pipelines.entities.persistence import create_task, get_task_by_key, update_task
 from ob_pipelines.entities.task import Task
 
@@ -22,27 +22,27 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-@TaskWrapper.event_handler(luigi.event.Event.START)
-def luigi_task_start(luigi_task: TaskWrapper):
+@LoggingTaskWrapper.event_handler(luigi.event.Event.START)
+def luigi_task_start(luigi_task: LoggingTaskWrapper):
     task: Task = Task()
-    task.name = luigi_task.task_id_str
+    task.name = luigi_task.task_id
     task.status = 'running'
-    task.started_at = datetime.utcnow()
-    luigi_task.task_id = create_task(task).key
+    task.started_at = datetime.utcnow().isoformat()
+    luigi_task.task_key = create_task(task).key
 
 
-@TaskWrapper.event_handler(luigi.event.Event.SUCCESS)
-def luigi_task_success(luigi_task: TaskWrapper):
-    task = get_task_by_key(luigi_task.task_id)
-    task.completed_at = datetime.utcnow()
+@LoggingTaskWrapper.event_handler(luigi.event.Event.SUCCESS)
+def luigi_task_success(luigi_task: LoggingTaskWrapper):
+    task = get_task_by_key(luigi_task.task_key)
+    task.completed_at = datetime.utcnow().isoformat()
     task.status = 'completed'
     update_task(task)
 
 
-@TaskWrapper.event_handler(luigi.event.Event.FAILURE)
-def luigi_task_failure(luigi_task: TaskWrapper):
-    task = get_task_by_key(luigi_task.task_id)
-    task.completed_at = datetime.utcnow()
+@LoggingTaskWrapper.event_handler(luigi.event.Event.FAILURE)
+def luigi_task_failure(luigi_task: LoggingTaskWrapper):
+    task = get_task_by_key(luigi_task.task_key)
+    task.completed_at = datetime.utcnow().isoformat()
     task.status = 'failed'
     task.exception = traceback.format_exc()
     update_task(task)

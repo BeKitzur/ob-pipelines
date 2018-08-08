@@ -50,9 +50,9 @@ Create `config.yaml` based on [config template](config-template.yaml)
 
 You can now run sample pipelines, eg [rnaseq.py](ob_pipelines/pipelines/rnaseq/rnaseq.py) or [xenograft.py](ob_pipelines/pipelines/xenograft/xenograft.py), or create your own. Please refer to [Creating own pipelines](#creating-own-pipelines)  
 To start pipeline run
-`luigi -m <namespace> <entrypoint> --expt-id="<experiment ID>"`
+`luigi --module <namespace> <entrypoint> --expt-id="<experiment ID>"`
 eg
- `luigi -m ob_pipelines.pipelines.rnaseq.rnaseq RnaSeq --expt-id="EXPT-1"`
+ `luigi --module ob_pipelines.pipelines.rnaseq.rnaseq RnaSeq --expt-id="EXPT-1"`
 
 !Please Note! Installation via `configure_bas.sh` is deprecated, please use `ob_pipelines/cluster.py` instead
 

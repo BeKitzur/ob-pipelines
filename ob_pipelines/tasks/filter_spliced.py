@@ -1,13 +1,13 @@
 from luigi.contrib.s3 import S3Target
 
-from ob_pipelines.batch import BatchTask
+from ob_pipelines.batch import BatchTask, LoggingTaskWrapper
 from ob_pipelines.config import cfg
 from ob_pipelines.entities.sample import Sample
 from ob_pipelines.tasks.index_bam import IndexBam
 from ob_pipelines.tasks.sort_bam import SortBam
 
 
-class FilterSpliced(BatchTask, Sample):
+class FilterSpliced(BatchTask, LoggingTaskWrapper, Sample):
     job_definition = 'filter-spliced'
 
     @property
